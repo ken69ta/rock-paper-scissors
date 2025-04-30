@@ -22,3 +22,13 @@ function getComputerChoice() {
 }
 
 // console.log(getComputerChoice());
+
+
+// TO DO 2
+// Create a new function named getHumanChoice
+    // Output should be a prompt asking the user for their choice
+    // Input should be a random string , case-insensitive
+
+function getHumanChoice() {
+    return prompt("Type your choice: 'rock', 'paper', or 'scissors'.");
+}
