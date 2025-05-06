@@ -1,15 +1,10 @@
-// console.log("Hello World")
-
-// TO DO 1
-// Create a new function named getComputerChoice
-    // Output will be a random string with the values "rock", "paper" or "scissors"
-
 let computerScore = 0;
 let humanScore = 0;
+let round = 0;
 
+// Generates a random choice for the computer
 function getComputerChoice() {
     let randomNumber = Math.floor(Math.random() * 3);
-    // console.log(randomNumber);
 
     switch (randomNumber) {
         case 0:
@@ -21,33 +16,8 @@ function getComputerChoice() {
     }
 }
 
-// console.log(getComputerChoice());
-
-
-// TO DO 2
-// Create a new function named getHumanChoice
-    // Output should be a prompt asking the user for their choice
-    // Input should be a random string , case-insensitive
-
-function getHumanChoice() {
-    return prompt("Type your choice: 'rock', 'paper', or 'scissors'.");
-}
-    
-// console.log(getHumanChoice())
-
-
-// TO DO 3
-// Create two new global variables, humanScore and computerScore, and initialize them with a value of 0
-
-// TO DO 4
-// Create a new function named playRound that takes 2 parameters (computerChoice, humanChoice)
-    // Use toLowerCase() method on humanChoice to convert it to lowercase
-    // Write a conditional (if else statement) and return the message
-    // Increment the scores of the two global variables
-
+// Determines the winner of a single round
 function playRound(humanChoice, computerChoice) {
-    console.log(`Choices => You: ${humanChoice}, Computer: ${computerChoice}`);
-    
     if (humanChoice === computerChoice) {
         return "It's a tie!";
     } else if (
@@ -63,22 +33,39 @@ function playRound(humanChoice, computerChoice) {
     }
 }
 
+// Adds event listeners to all buttons for handling player choices
+const buttons = document.querySelectorAll("button");
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        // Retrieves player's choice based on the button's ID
+        const humanChoice = button.id;
+        // Generates a random choice for the computer.
+        const computerChoice = getComputerChoice();
+        round ++;
 
-// TO DO 5
-// Create a new function named playGame, this function will call playRound until round 5
+        // If neither player has reached 5 points, updates the game history and score display
+        if (humanScore < 5 && computerScore < 5) {
+            const result = playRound(humanChoice, computerChoice);
+        
+            const records = document.querySelector("#records");
+            const textarea = records.firstElementChild;
+            textarea.value += `\n${round} | You: ${humanChoice}, Computer: ${computerChoice}. ${result}`;
 
-function playGame(totalRound) {
-    for (let i = 0; i < totalRound; i++) {
-        const humanSelection = getHumanChoice().toLowerCase();
-        const computerSelection = getComputerChoice();
+            const scores = document.querySelector("#scores");
+            const p = scores.firstElementChild;
+            p.textContent = `You: ${humanScore}, Computer: ${computerScore}`;
+        } 
+        // If a player reaches 5 points, displays the final result and prompts for a replay
+        else {
+            const container = document.querySelector("#container");
+            const finalResult = humanScore > computerScore ? "You win the game!" : "Computer wins the game!";
+            const h = document.createElement("h3");
+            h.textContent = finalResult;
+            container.appendChild(h);
+            
+            // If the player confirms replay, reloads the page after a brief delay
+            confirm("Play again?") ? setTimeout(() => window.location.reload(true), 3000) : false;
+        } 
+    });
+});
 
-        console.log(`Round ${i + 1}:`);
-        console.log(playRound(humanSelection, computerSelection));
-        console.log(`Scores => You: ${humanScore}, Computer: ${computerScore}`);
-    }
-
-    console.log(humanScore > computerScore ? "You win the game!" : computerScore > humanScore ? "Computer wins the game!" : "It's a tie game!");
-}
-
-
-playGame(5);
